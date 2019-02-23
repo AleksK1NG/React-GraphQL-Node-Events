@@ -1,0 +1,27 @@
+{
+  "name": "react-graphql-node-events",
+  "version": "1.0.0",
+  "description": "pet project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AleksK1NG/React-GraphQL-Node-Events.git"
+  },
+  "author": "alexander.bryksin@yandex.ru",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AleksK1NG/React-GraphQL-Node-Events/issues"
+  },
+  "homepage": "https://github.com/AleksK1NG/React-GraphQL-Node-Events#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
