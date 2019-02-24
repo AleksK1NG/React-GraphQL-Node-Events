@@ -13,7 +13,11 @@ module.exports = {
       throw err;
     }
   },
-  createEvent: async (args) => {
+
+  createEvent: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated !');
+    }
     const event = new Event({
       title: args.eventInput.title,
       description: args.eventInput.description,
@@ -21,7 +25,9 @@ module.exports = {
       date: new Date(args.eventInput.date),
       creator: '5c7264363e26c827003ac771'
     });
+
     let createdEvent;
+
     try {
       const result = await event.save();
       createdEvent = transformEvent(result);

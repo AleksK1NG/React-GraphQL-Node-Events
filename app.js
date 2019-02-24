@@ -3,12 +3,16 @@ const bodyParser = require('body-parser');
 const graphQLHttp = require('express-graphql');
 const mongoose = require('mongoose');
 
+const isAuth = require('./middlewares/isAuth');
+
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolvers = require('./graphql/resolvers/index');
 
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(isAuth);
 
 app.use(
   '/graphql',
@@ -21,7 +25,9 @@ app.use(
 
 mongoose
   .connect(
-    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds349045.mlab.com:49045/react-graphql-events`
+    `mongodb://${process.env.MONGO_USER}:${
+      process.env.MONGO_PASSWORD
+    }@ds349045.mlab.com:49045/react-graphql-events`
   )
   .then(() => {
     app.listen(3000);
