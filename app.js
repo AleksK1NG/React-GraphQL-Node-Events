@@ -30,7 +30,7 @@ mongoose
     }@ds349045.mlab.com:49045/react-graphql-events`
   )
   .then(() => {
-    app.listen(3000);
+    app.listen(8000);
   })
   .catch((error) => {
     console.log(error);

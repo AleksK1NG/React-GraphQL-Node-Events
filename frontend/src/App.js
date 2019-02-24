@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import AuthPage from './pages/AuthPage';
+import AuthPage from './pages/Auth/AuthPage';
 import BookingsPage from './pages/BookingsPage';
 import EventsPage from './pages/EventsPage';
 import MainNavBar from './components/Navbar/MainNavBar';
