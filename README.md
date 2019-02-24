@@ -1,2 +1,2 @@
-# React-GraphQL-Node-Events
-React-GraphQL-Node-Events pet project
+# React-GraphQL-Node-EventsPage
+React-GraphQL-Node-EventsPage pet project
