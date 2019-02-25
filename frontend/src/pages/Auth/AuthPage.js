@@ -6,7 +6,7 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(false);
   const emailEL = useRef(null);
   const passwordEL = useRef(null);
-  const { token, userId, login, logOut } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const switchModeHandler = () => setIsLogin((isLogin) => !isLogin);
 
@@ -83,7 +83,7 @@ const AuthPage = () => {
       </div>
       <div className="form-actions">
         <button type="button" onClick={login}>
-          Go to {isLogin ? 'Register' : 'Login'}
+          Go to {!isLogin ? 'Register' : 'Login'}
         </button>
         <button type="submit" onClick={switchModeHandler}>
           Submit

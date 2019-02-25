@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../context/authContext';
 import './MainNavBar.css';
 
 const MainNavBar = (props) => {
-  const { token, userId, login, logOut } = useContext(AuthContext);
+  const { token, logOut } = useContext(AuthContext);
   return (
     <header className="main-navigation">
       <div className="main-navigation__logo">
@@ -21,9 +21,14 @@ const MainNavBar = (props) => {
             <NavLink to="/events">Events</NavLink>
           </li>
           {token && (
-            <li>
-              <NavLink to="/bookings">Bookings</NavLink>
-            </li>
+            <React.Fragment>
+              <li>
+                <NavLink to="/bookings">Bookings</NavLink>
+              </li>
+              <li>
+                <button onClick={logOut}>Logout</button>
+              </li>
+            </React.Fragment>
           )}
         </ul>
       </nav>
