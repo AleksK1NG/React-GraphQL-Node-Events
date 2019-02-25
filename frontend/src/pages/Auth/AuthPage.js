@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import './AuthPage.css';
+import AuthContext from '../../context/authContext';
 
-const AuthPage = (props) => {
-  const [isLogin, setIsLogin] = useState(true);
+const AuthPage = () => {
+  const [isLogin, setIsLogin] = useState(false);
   const emailEL = useRef(null);
   const passwordEL = useRef(null);
+  const { token, userId, login, logOut } = useContext(AuthContext);
 
   const switchModeHandler = () => setIsLogin((isLogin) => !isLogin);
 
@@ -55,7 +57,14 @@ const AuthPage = (props) => {
         return res.json();
       })
       .then((resData) => {
-        console.log(resData);
+        if (resData.data.login.token) {
+          login(
+            resData.data.login.token,
+            resData.data.login.userId,
+            resData.data.login.tokenExpiration
+          );
+        }
+        console.log('resData from auth', resData);
       })
       .catch((err) => {
         console.log(err);
@@ -70,10 +79,12 @@ const AuthPage = (props) => {
       </div>
       <div className="form-control">
         <label htmlFor="password">Password</label>
-        <input type="password" id="email" ref={passwordEL} />
+        <input type="password" id="password" ref={passwordEL} />
       </div>
       <div className="form-actions">
-        <button type="button">Go to {isLogin ? 'Register' : 'Login'}</button>
+        <button type="button" onClick={login}>
+          Go to {isLogin ? 'Register' : 'Login'}
+        </button>
         <button type="submit" onClick={switchModeHandler}>
           Submit
         </button>
@@ -83,3 +94,4 @@ const AuthPage = (props) => {
 };
 
 export default AuthPage;
+
