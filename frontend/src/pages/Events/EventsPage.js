@@ -1,18 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import './EventsPage.css';
 import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
+import AuthContext from '../../context/authContext';
 
 const EventsPage = (props) => {
   const [creating, setCreating] = useState(false);
+  const [events, setEvents] = useState([]);
+  const { token } = useContext(AuthContext);
+
   const titleElRef = useRef(null);
   const priceElRef = useRef(null);
   const dateElRef = useRef(null);
   const descriptionElRef = useRef(null);
 
   const startCreateEventHandler = () => setCreating(true);
-  const modalConfirmHandler = () => {
 
+  const modalConfirmHandler = () => {
     const title = titleElRef.current.value;
     const price = priceElRef.current.value;
     const date = dateElRef.current.value;
@@ -28,15 +32,98 @@ const EventsPage = (props) => {
     }
 
     const event = { title, price, date, description };
-    console.log('event from confirm =>', event);
+
+    const requestBody = {
+      query: `
+          mutation {
+            createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+              _id
+              title
+              description
+              date
+              price
+              creator {
+                _id
+                email
+              }
+            }
+          }
+        `
+    };
+
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        console.log('resDtata fetch events', resData);
+        fetchEvents();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setCreating(false);
   };
+
   const modalCancelHandler = () => setCreating(false);
 
   useEffect(() => {
+    fetchEvents();
     console.log('events page ');
   }, []);
+
+  const fetchEvents = () => {
+    const requestBody = {
+      query: `
+          query {
+            events {
+              _id
+              title
+              description
+              date
+              price
+              creator {
+                _id
+                email
+              }
+            }
+          }
+        `
+    };
+
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        const events = resData.data.events;
+        console.log('resData => events ', events);
+        setEvents(events);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <React.Fragment>

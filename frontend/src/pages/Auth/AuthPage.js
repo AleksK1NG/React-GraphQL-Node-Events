@@ -73,6 +73,7 @@ const AuthPage = () => {
 
   return (
     <form className="auth-form" onSubmit={submitHandler}>
+      <h2>Logged in : {isLogin ? 'true': 'false'}</h2>
       <div className="form-control">
         <label htmlFor="email">Email</label>
         <input type="text" id="email" ref={emailEL} />
