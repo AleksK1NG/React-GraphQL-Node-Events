@@ -66,7 +66,7 @@ const EventsPage = (props) => {
         return res.json();
       })
       .then((resData) => {
-        console.log('resDtata fetch events', resData);
+        console.log('resData fetch events', resData);
         fetchEvents();
       })
       .catch((err) => {
@@ -125,6 +125,14 @@ const EventsPage = (props) => {
       });
   };
 
+  const eventsList = events.map((event) => {
+    return (
+      <li key={event._id} className="events__list-item">
+        {event.title}
+      </li>
+    );
+  });
+
   return (
     <React.Fragment>
       {creating && <Backdrop />}
@@ -156,13 +164,15 @@ const EventsPage = (props) => {
           </form>
         </Modal>
       )}
-      <h2>Events page</h2>
-      <div className="events-control">
-        <p>Share your own Events!</p>
-        <button className="btn" onClick={startCreateEventHandler}>
-          Create Event
-        </button>
-      </div>
+      {token && (
+        <div className="events-control">
+          <p>Share your own Events!</p>
+          <button className="btn" onClick={startCreateEventHandler}>
+            Create Event
+          </button>
+        </div>
+      )}
+      <ul className="events__list">{eventsList}</ul>
     </React.Fragment>
   );
 };
