@@ -3,11 +3,15 @@ import './EventsPage.css';
 import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import AuthContext from '../../context/authContext';
+import EventList from '../../components/Events/EventList/EventList';
 
 const EventsPage = (props) => {
   const [creating, setCreating] = useState(false);
   const [events, setEvents] = useState([]);
-  const { token } = useContext(AuthContext);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { token, userId } = useContext(AuthContext);
 
   const titleElRef = useRef(null);
   const priceElRef = useRef(null);
@@ -125,13 +129,9 @@ const EventsPage = (props) => {
       });
   };
 
-  const eventsList = events.map((event) => {
-    return (
-      <li key={event._id} className="events__list-item">
-        {event.title}
-      </li>
-    );
-  });
+  const showDetailHandler = (userId) => {
+    console.log(userId);
+  };
 
   return (
     <React.Fragment>
@@ -172,7 +172,14 @@ const EventsPage = (props) => {
           </button>
         </div>
       )}
-      <ul className="events__list">{eventsList}</ul>
+
+      {events && (
+        <EventList
+          onViewDetail={showDetailHandler}
+          authUserId={userId}
+          events={events}
+        />
+      )}
     </React.Fragment>
   );
 };
