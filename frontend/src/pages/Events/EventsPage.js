@@ -155,8 +155,43 @@ const EventsPage = (props) => {
   };
 
   const bookEventHandler = () => {
-    // TODO: book handler
-    console.log('book handler');
+    if (!token) {
+      setSelectedEvent(null);
+      return;
+    }
+    const requestBody = {
+      query: `
+          mutation {
+            bookEvent(eventId: "${selectedEvent._id}") {
+              _id
+             createdAt
+             updatedAt
+            }
+          }
+        `
+    };
+
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        console.log('from bookEventHandler success =>', resData);
+        setSelectedEvent(null);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -199,7 +234,7 @@ const EventsPage = (props) => {
           canConfirm
           onCancel={modalCancelHandler}
           onConfirm={bookEventHandler}
-          confirmText="Book"
+          confirmText={token ? 'Book' : 'Confirm'}
         >
           <h1>{selectedEvent.title}</h1>
           <h2>
