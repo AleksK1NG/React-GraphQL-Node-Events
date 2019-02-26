@@ -7,7 +7,8 @@ const Modal = ({
   onCancel,
   onConfirm,
   canCancel,
-  canConfirm
+  canConfirm,
+  confirmText
 }) => {
   return (
     <div className="modal">
@@ -23,7 +24,7 @@ const Modal = ({
         )}
         {canConfirm && (
           <button className="btn" onClick={onConfirm}>
-            Confirm
+            {confirmText}
           </button>
         )}
       </section>

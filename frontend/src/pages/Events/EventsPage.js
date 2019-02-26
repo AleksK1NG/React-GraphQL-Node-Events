@@ -94,7 +94,10 @@ const EventsPage = (props) => {
     setCreating(false);
   };
 
-  const modalCancelHandler = () => setCreating(false);
+  const modalCancelHandler = () => {
+    setCreating(false);
+    setSelectedEvent(null);
+  };
 
   useEffect(() => {
     fetchEvents();
@@ -149,7 +152,11 @@ const EventsPage = (props) => {
   const showDetailHandler = (eventId) => {
     const selectedEv = events.find((e) => e._id === eventId);
     setSelectedEvent(selectedEv);
-    console.log(selectedEv, eventId);
+  };
+
+  const bookEventHandler = () => {
+    // TODO: book handler
+    console.log('book handler');
   };
 
   return (
@@ -162,6 +169,7 @@ const EventsPage = (props) => {
           title="Add Event"
           canCancel
           canConfirm
+          confirmText="Confirm"
         >
           <form>
             <div className="form-control">
@@ -183,6 +191,25 @@ const EventsPage = (props) => {
           </form>
         </Modal>
       )}
+
+      {selectedEvent && (
+        <Modal
+          title={selectedEvent.title}
+          canCancel
+          canConfirm
+          onCancel={modalCancelHandler}
+          onConfirm={bookEventHandler}
+          confirmText="Book"
+        >
+          <h1>{selectedEvent.title}</h1>
+          <h2>
+            ${selectedEvent.price} -{' '}
+            {new Date(selectedEvent.date).toLocaleDateString()}
+          </h2>
+          <p>{selectedEvent.description}</p>
+        </Modal>
+      )}
+
       {token && (
         <div className="events-control">
           <p>Share your own Events!</p>
