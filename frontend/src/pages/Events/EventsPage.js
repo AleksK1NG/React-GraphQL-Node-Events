@@ -4,6 +4,7 @@ import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import AuthContext from '../../context/authContext';
 import EventList from '../../components/Events/EventList/EventList';
+import Spinner from '../../components/Spinner/Spinner';
 
 const EventsPage = (props) => {
   const [creating, setCreating] = useState(false);
@@ -71,6 +72,19 @@ const EventsPage = (props) => {
       })
       .then((resData) => {
         console.log('resData fetch events', resData);
+        const newEvent = {
+          _id: resData.data.createEvent._id,
+          title: resData.data.createEvent.title,
+          description: resData.data.createEvent.description,
+          date: resData.data.createEvent.date,
+          price: resData.data.createEvent.price,
+          creator: {
+            _id: userId
+          }
+        };
+
+        setEvents((events) => [...events, newEvent]);
+        console.log('events from state => ', events);
         fetchEvents();
       })
       .catch((err) => {
@@ -88,6 +102,7 @@ const EventsPage = (props) => {
   }, []);
 
   const fetchEvents = () => {
+    setIsLoading(true);
     const requestBody = {
       query: `
           query {
@@ -123,14 +138,18 @@ const EventsPage = (props) => {
         const events = resData.data.events;
         console.log('resData => events ', events);
         setEvents(events);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
 
-  const showDetailHandler = (userId) => {
-    console.log(userId);
+  const showDetailHandler = (eventId) => {
+    const selectedEv = events.find((e) => e._id === eventId);
+    setSelectedEvent(selectedEv);
+    console.log(selectedEv, eventId);
   };
 
   return (
@@ -173,7 +192,9 @@ const EventsPage = (props) => {
         </div>
       )}
 
-      {events && (
+      {isLoading ? (
+        <Spinner />
+      ) : (
         <EventList
           onViewDetail={showDetailHandler}
           authUserId={userId}

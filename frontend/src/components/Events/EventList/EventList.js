@@ -21,3 +21,5 @@ const EventList = ({ events, authUserId, onViewDetail }) => {
   return <ul className="event__list">{events}</ul>;
 };
 export default EventList;
+
+
