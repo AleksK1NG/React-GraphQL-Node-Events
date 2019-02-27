@@ -19,6 +19,8 @@ const EventsPage = (props) => {
   const dateElRef = useRef(null);
   const descriptionElRef = useRef(null);
 
+  let isActive = true;
+
   const startCreateEventHandler = () => setCreating(true);
 
   const modalConfirmHandler = () => {
@@ -102,6 +104,9 @@ const EventsPage = (props) => {
   useEffect(() => {
     fetchEvents();
     console.log('events page ');
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const fetchEvents = () => {
@@ -140,12 +145,16 @@ const EventsPage = (props) => {
       .then((resData) => {
         const events = resData.data.events;
         console.log('resData => events ', events);
-        setEvents(events);
-        setIsLoading(false);
+        if (isActive) {
+          setEvents(events);
+          setIsLoading(false);
+        }
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false);
+        if (isActive) {
+          setIsLoading(false);
+        }
       });
   };
 
